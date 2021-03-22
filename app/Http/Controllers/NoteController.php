@@ -9,12 +9,6 @@ use App\Models\Note;
 
 class NoteController extends Controller
 {
-    /*
-    
-        ALTERACAO DE OUTRO PROGRAMADOR
-        ISSO É APENAS UM TESTE
-    
-    */
     //EXIBE TODAS AS NOTAS
     public function list() {
         $array = ['error' => '', 'data' => []];
@@ -117,7 +111,7 @@ class NoteController extends Controller
         if($note) {
             $note->delete();
             $array['deleted'] = true;
-            
+
         } else {
             $array['error'] = "Esta anotação não existe";
             $array['deleted'] = false;
