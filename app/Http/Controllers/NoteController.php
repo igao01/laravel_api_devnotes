@@ -9,6 +9,12 @@ use App\Models\Note;
 
 class NoteController extends Controller
 {
+    /*
+    
+        ALTERACAO DE OUTRO PROGRAMADOR
+        ISSO É APENAS UM TESTE
+    
+    */
     //EXIBE TODAS AS NOTAS
     public function list() {
         $array = ['error' => '', 'data' => []];
