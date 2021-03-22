@@ -55,10 +55,66 @@ class NoteController extends Controller
             $newNote->body = $body;
             $newNote->save();
             $array['created'] = true;
-            
+
         } else {
             $array['created'] = false;
-            $array['error'] = "Não foi possível salvar sua anotação";
+            $array['error'] = "Por Favor preencha todos os campos";
+        }
+        return $array;
+    }
+
+    //ATUALIZA UMA ANOTAÇÃO
+    public function update(Request $request, $id) {
+        $array = ['error' => ''];
+
+        $rules = [
+            'title' => 'required',
+            'body' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()) {
+            $array['updated'] = false;
+            $array['error'] = "Por favor preencha todos os campos";
+            return $array;
+        }
+        $title = $request->input('title');
+        $body = $request->input('body');
+
+        $note = Note::find($id);
+
+        if(!$note) {
+            $array['updated'] = false;
+            $array['error'] = "A anotação não foi encontrada no banco de dados";
+            return $array;
+        }
+
+        if($title) {
+            $note->title = $title;
+        }
+
+        if($body) {
+            $note->body = $body;
+        }
+        
+        $note->save();
+        $array['updated'] = true;
+        return $array;
+    }
+
+    //DELETA UMA ANOTAÇÃO
+    public function del($id) {
+        $array = ['error' => ''];
+
+        $note = Note::find($id);
+
+        if($note) {
+            $note->delete();
+            $array['deleted'] = true;
+            
+        } else {
+            $array['error'] = "Esta anotação não existe";
+            $array['deleted'] = false;
         }
         return $array;
     }
