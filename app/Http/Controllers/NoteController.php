@@ -9,7 +9,7 @@ use App\Models\Note;
 
 class NoteController extends Controller
 {
-    //EXIBE TODAS AS NOTAS
+    //BUSCA TODAS ANOTACOES
     public function list() {
         $array = ['error' => '', 'data' => []];
 
@@ -23,9 +23,9 @@ class NoteController extends Controller
         return $array;
     }
 
-    //EXIBE DETALHES DE UMA ANOTACAO
+    //BUSCA UMA ANOTACAO PELO ID
     public function read($id) {
-        $array = ['error'=>''];
+        $array = ['error' => ''];
 
         $note = Note::find($id);
 
@@ -37,9 +37,9 @@ class NoteController extends Controller
         return $array;
     }
 
-    //CRIA UMA NOVA ANOTAÇÃO
+    //CRIA UMA NOVA ANOTACAO
     public function create(Request $request) {
-        $array = ['error' => ''];
+        $array = ['error' => '', 'created' => false];
 
         $validator = Validator::make($request->all(), [
             'title' => 'required',
@@ -57,15 +57,14 @@ class NoteController extends Controller
             $array['created'] = true;
 
         } else {
-            $array['created'] = false;
             $array['error'] = "Por Favor preencha todos os campos";
         }
         return $array;
     }
 
-    //ATUALIZA UMA ANOTAÇÃO
+    //ATUALIZA UMA ANOTACAO
     public function update(Request $request, $id) {
-        $array = ['error' => ''];
+        $array = ['error' => '', 'updated' => false];
 
         $rules = [
             'title' => 'required',
@@ -74,7 +73,6 @@ class NoteController extends Controller
         $validator = Validator::make($request->all(), $rules);
 
         if($validator->fails()) {
-            $array['updated'] = false;
             $array['error'] = "Por favor preencha todos os campos";
             return $array;
         }
@@ -84,11 +82,11 @@ class NoteController extends Controller
         $note = Note::find($id);
 
         if(!$note) {
-            $array['updated'] = false;
             $array['error'] = "A anotação não foi encontrada no banco de dados";
             return $array;
         }
 
+        //VERIFICA QUAIS CAMPOS PRECISAM SER ALTERADOS
         if($title) {
             $note->title = $title;
         }
@@ -104,7 +102,7 @@ class NoteController extends Controller
 
     //DELETA UMA ANOTAÇÃO
     public function del($id) {
-        $array = ['error' => ''];
+        $array = ['error' => '', 'deleted' => false];
 
         $note = Note::find($id);
 
@@ -114,7 +112,6 @@ class NoteController extends Controller
 
         } else {
             $array['error'] = "Esta anotação não existe";
-            $array['deleted'] = false;
         }
         return $array;
     }
